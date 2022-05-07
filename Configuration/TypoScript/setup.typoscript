@@ -1,0 +1,222 @@
+######################
+#### DEPENDENCIES ####
+######################
+<INCLUDE_TYPOSCRIPT: source="FILE:EXT:bootstrap_package/Configuration/TypoScript/setup.typoscript">
+
+
+##############
+#### PAGE ####
+##############
+page {
+    includeCSSLibs {
+        googlewebfont = https://fonts.googleapis.com/css?family=Mulish:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800
+    }
+    includeCSS {
+        theme = EXT:asisso11/Resources/Public/Scss/Theme/theme.scss
+        sisso_layout = EXT:asisso11/Resources/Public/Css/asisso.css
+    }
+
+    includeJSLibs {
+
+    }
+
+    includeJS {
+
+    }
+
+    includeJSFooterlibs {
+
+    }
+
+    includeJSFooter {
+        asisso11_scripts = EXT:asisso11/Resources/Public/JavaScript/Dist/scripts.js
+    }
+}
+
+#############################################
+## From here onward added by Eduardo Frank ##
+#############################################
+# Error reports in plain text instead of oops
+config.admPanel = 0
+config.contentObjectExceptionHandler = 0
+
+#### FORM CONFIGURATION ###
+plugin.tx_form.settings.yamlConfigurations.100 = EXT:asisso11/Configuration/Form/myFormSetup.yaml
+module.tx_form.settings.yamlConfigurations.100 = EXT:asisso11/Configuration/Form/myFormSetup.yaml
+
+#### SMALL LOGO IN HEADER ###
+lib.sm-logo = TEXT
+lib.sm-logo.value = /typo3conf/ext/asisso11/Resources/Public/Images/logo_menu.svg
+
+
+plugin.tx_news.settings.detail.checkPidOfNewsRecord = 1
+
+plugin.tx_news.settings.list.media.image.maxWidth = 600
+
+#### SEO CONFIGURATION ###
+plugin.tx_seo {
+    config {
+        xmlSitemap {
+            sitemaps {
+                blog {
+                    provider = GeorgRinger\News\Seo\NewsXmlSitemapDataProvider
+                    config {
+                        table = tx_news_domain_model_news
+                        excludedTypes = 1,2
+                        additionalWhere =
+                        ## enable these two lines to generate a Google News sitemap
+                        # template = EXT:news/Resources/Private/Templates/News/GoogleNews.xml
+                        # googleNews = 1
+
+                        sortField = datetime
+                        lastModifiedField = tstamp
+                        pid = 18
+                        recursive = 2
+                        url {
+                            pageId = 6
+                            useCategorySinglePid = 7
+
+                            hrDate = 0
+                            hrDate {
+                                day = j
+                                month = n
+                                year = Y
+                            }
+
+                            fieldToParameterMap {
+                                uid = tx_news_pi1[news]
+                            }
+
+                            additionalGetParameters {
+                                tx_news_pi1.controller = News
+                                tx_news_pi1.action = detail
+                            }
+                        }
+                    }
+                }
+                fine-art {
+                    provider = GeorgRinger\News\Seo\NewsXmlSitemapDataProvider
+                    config {
+                        table = tx_news_domain_model_news
+                        excludedTypes = 1,2
+                        additionalWhere =
+                        ## enable these two lines to generate a Google News sitemap
+                        # template = EXT:news/Resources/Private/Templates/News/GoogleNews.xml
+                        # googleNews = 1
+
+                        sortField = datetime
+                        lastModifiedField = tstamp
+                        pid = 9
+                        recursive = 2
+                        url {
+                            pageId = 8
+                            useCategorySinglePid = 9
+
+                            hrDate = 0
+                            hrDate {
+                                day = j
+                                month = n
+                                year = Y
+                            }
+
+                            fieldToParameterMap {
+                                uid = tx_news_pi1[news]
+                            }
+
+                            additionalGetParameters {
+                                tx_news_pi1.controller = News
+                                tx_news_pi1.action = detail
+                            }
+                        }
+                    }
+                }
+                documentary-photography {
+                    provider = GeorgRinger\News\Seo\NewsXmlSitemapDataProvider
+                    config {
+                        table = tx_news_domain_model_news
+                        excludedTypes = 1,2
+                        additionalWhere =
+                        ## enable these two lines to generate a Google News sitemap
+                        # template = EXT:news/Resources/Private/Templates/News/GoogleNews.xml
+                        # googleNews = 1
+
+                        sortField = datetime
+                        lastModifiedField = tstamp
+                        pid = 33
+                        recursive = 2
+                        url {
+                            pageId = 29
+                            useCategorySinglePid = 10
+
+                            hrDate = 0
+                            hrDate {
+                                day = j
+                                month = n
+                                year = Y
+                            }
+
+                            fieldToParameterMap {
+                                uid = tx_news_pi1[news]
+                            }
+
+                            additionalGetParameters {
+                                tx_news_pi1.controller = News
+                                tx_news_pi1.action = detail
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+#### GETS RID OF THE ROOT IN THE BREADCRUMB MENU ####
+page {
+    10 = FLUIDTEMPLATE
+    10 {
+	dataProcessing {
+                30 {
+                special = rootline
+                special.range = 1|-1
+                includeNotInMenu = 1
+                as = breadcrumb
+                if {
+                    value = {$page.theme.breadcrumb.enableLevel}
+                    value {
+                        insertData = 1
+                        prioriCalc = 1
+                        stdWrap.wrap = |-1
+                    }
+                    isGreaterThan {
+                        data = level
+                    }
+                }
+                dataProcessing {
+                    10 = TYPO3\CMS\Frontend\DataProcessing\FilesProcessor
+                    10 {
+                        references.fieldName = nav_icon
+                        as = icon
+                    }
+                }
+            }
+        }
+    }
+}
+
+#### ADDS NEWS TITLE TO BREADCRUMB MENU ####
+[request.getQueryParams()['tx_news_pi1'] && request.getQueryParams()['tx_news_pi1']['news'] > 0]
+page {
+    10 {
+        variables {
+            breadcrumbExtendedValue = TEXT
+            breadcrumbExtendedValue {
+                dataWrap = DB:tx_news_domain_model_news:{GP:tx_news_pi1|news}:title
+                wrap3 = {|}
+                insertData = 1
+            }
+        }
+    }
+}
+[global]

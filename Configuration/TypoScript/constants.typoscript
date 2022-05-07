@@ -1,0 +1,72 @@
+######################
+#### DEPENDENCIES ####
+######################
+<INCLUDE_TYPOSCRIPT: source="FILE:EXT:bootstrap_package/Configuration/TypoScript/constants.typoscript">
+
+
+############
+### PAGE ###
+############
+page {
+    logo {
+        file = EXT:asisso11/Resources/Public/Images/logo.svg
+        height = 56
+        width = 185
+        alt = Alberto Sisso
+        linktitle = asisso
+    }
+    favicon {
+        file = EXT:asisso11/Resources/Public/Icons/favicon.ico
+    }
+    fluidtemplate {
+        layoutRootPath = EXT:asisso11/Resources/Private/Layouts/Page/
+        partialRootPath = EXT:asisso11/Resources/Private/Partials/Page/
+        templateRootPath = EXT:asisso11/Resources/Private/Templates/Page/
+    }
+}
+
+
+##################
+### EXTENSIONS ###
+##################
+plugin.bootstrap_package {
+    view {
+        layoutRootPath = EXT:asisso11/Resources/Private/Layouts/
+        partialRootPath = EXT:asisso11/Resources/Private/Partials/
+        templateRootPath = EXT:asisso11/Resources/Private/Templates/
+    }
+}
+
+
+########################
+### CONTENT ELEMENTS ###
+########################
+plugin.bootstrap_package_contentelements {
+    view {
+        layoutRootPath = EXT:asisso11/Resources/Private/Layouts/ContentElements/
+        partialRootPath = EXT:asisso11/Resources/Private/Partials/ContentElements/
+        templateRootPath = EXT:asisso11/Resources/Private/Templates/ContentElements/
+    }
+}
+
+
+################################
+### BOOTSTRAP SCSS CONSTANTS ###
+################################
+plugin.bootstrap_package.settings.scss {
+    grid-float-breakpoint = 9999px
+    primary = #eb3e4a
+    secondary = #013859
+}
+
+#############################################
+## From here onward added by Eduardo Frank ##
+#############################################
+
+plugin.tx_news {
+    view.twb5 {
+                templateRootPath = EXT:asisso11/Resources/Private/Templates/Styles/Twb5/Templates
+                partialRootPath = EXT:asisso11/Resources/Private/Templates/Styles/Twb5/Partials/
+                layoutRootPath = EXT:asisso11/Resources/Private/Templates/Styles/Twb5/Layouts/
+            }
+}

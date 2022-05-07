@@ -1,0 +1,77 @@
+base: 'https://albertosisso.com'
+baseVariants: {  }
+errorHandling:
+  -
+    errorCode: '404'
+    errorHandler: Page
+    errorContentSource: 't3://page?uid=32'
+languages:
+  -
+    title: English
+    enabled: true
+    languageId: '0'
+    base: /
+    typo3Language: default
+    locale: en_US.UTF-8
+    iso-639-1: en
+    navigationTitle: English
+    hreflang: en-US
+    direction: ltr
+    flag: us
+rootPageId: 1
+routeEnhancers:
+  NewsList:
+    type: Extbase
+    limitToPages:
+      - 6
+      - 8
+      - 29
+    extension: News
+    plugin: Pi1
+    routes:
+      -
+        routePath: '/page/{page}'
+        _controller: 'News::list'
+        _arguments:
+          page: '@widget_0/currentPage'
+    defaultController: 'News::list'
+    defaults:
+      page: '0'
+    requirements:
+      page: \d+
+    aspects:
+      page:
+        type: StaticRangeMapper
+        start: '1'
+        end: '100'
+  NewsDetail:
+    type: Extbase
+    limitToPages:
+      - 6
+      - 8
+      - 29
+    extension: News
+    plugin: Pi1
+    routes:
+      -
+        routePath: '/{news_title}'
+        _controller: 'News::detail'
+        _arguments:
+          news_title: news
+    defaultController: 'News::detail'
+    requirements:
+      news_title: '^[a-zA-Z0-9].*$'
+    aspects:
+      news_title:
+        type: PersistedAliasMapper
+        tableName: tx_news_domain_model_news
+        routeFieldName: path_segment
+routes:
+  -
+    route: sitemap.xml
+    type: uri
+    source: 'https://albertosisso.com/?type=1533906435'
+  -
+    route: robots.txt
+    type: staticText
+    content: "User-agent:*\r\nDisallow:/contact/thanks\r\nDisallow:/typo3/\r\n"
